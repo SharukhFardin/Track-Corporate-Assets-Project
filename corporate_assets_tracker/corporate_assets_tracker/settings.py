@@ -73,10 +73,15 @@ WSGI_APPLICATION = 'corporate_assets_tracker.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# MySQL database.
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'db',
+        'USER': 'root',
+        'PASSWORD': 'scareface',
+        'PORT': 3306,
+        'HOST': '127.0.0.1',
     }
 }
 
