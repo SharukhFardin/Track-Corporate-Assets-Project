@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Company, Employee, Device, DeviceLogs
+from .forms import EmployeeForm, DeviceForm
 
 # Method for the home page of the application
 def home(request):
@@ -58,8 +59,20 @@ def add_employee(request):
         form = EmployeeForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('list_of_employees')  # Redirect to the employee list view
+            return redirect('list_of_employees')  # Need to create this view
     else:
         form = EmployeeForm()
 
     return render(request, 'add_employee.html', {'form': form})
+
+# (Related to Goal 3) Admins can add devices and assign them to specific employees for a certain period of time
+def add_device(request):
+    if request.method == 'POST':
+        form = DeviceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('device_list')  # Need to create this view for viewing device list
+    else:
+        form = DeviceForm()
+
+    return render(request, 'add_device.html', {'form': form})
