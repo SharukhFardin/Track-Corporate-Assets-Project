@@ -36,3 +36,30 @@ def login(request):
 # Method for logging out and redirecting to the homepage. Not necessary to implement as far the project description goes
 def logout(request):
 	pass
+
+# Methods for adding company employees
+def add_company(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        location = request.POST['location']
+
+        company = Company(name=name, location=location)
+        company.save()
+
+        return redirect('companies')
+
+    else:
+        return render(request, 'add_company.html')
+
+# (Related to Goal 2) Method for adding employess. Companies can add all of some of it's employees
+# Two types of employees (roles) - Admin & User
+def add_employee(request):
+    if request.method == 'POST':
+        form = EmployeeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('list_of_employees')  # Redirect to the employee list view
+    else:
+        form = EmployeeForm()
+
+    return render(request, 'add_employee.html', {'form': form})
