@@ -11,6 +11,8 @@ from .forms import EmployeeForm, DeviceForm
 from django.utils import timezone
 from django.conf import settings
 
+import stripe # Third party payment gateway. Not available in BD. using it as a placeholder
+
 # Method for the home page of the application
 def home(request):
 	return render(request, 'home.html')
@@ -111,3 +113,22 @@ def device_detail(request, device_id):
 def device_logs(request, devicelogs_id):
     device = get_object_or_404(DeviceLogs, id=devicelogs_id)
     return render(request, 'devicelogs.html', {'devicelogs': devicelogs})
+
+# (Bonus Point 3) Third party payment gateway
+# API key of stripe. It is not available in Bangladesh.
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+# Model for managing third party strip payment gateway.
+def payment(request):
+    if request.method == 'POST':
+        amount = 1000  # Amount in taka
+        try:
+            # Create a payment intent
+            payment_intent = stripe.PaymentIntent.create(
+                amount=amount,
+                currency='bdt',
+            )
+            return render(request, 'payment.html', {'client_secret': payment_intent.client_secret})
+        except stripe.error.CardError as e:
+            return render(request, 'payment_error.html', {'error': e.error.message})
+    return render(request, 'payment.html')

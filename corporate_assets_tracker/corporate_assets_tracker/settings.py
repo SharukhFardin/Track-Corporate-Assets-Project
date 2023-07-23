@@ -22,6 +22,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-8y72b=0t4tnp=6$y4(0izqpz-bfpcp0iog9m!@-643jk(a0zs!'
 
+# Stripe secret key
+# Note that stripe is not supported in Bangladesh. using it just for a placeholder code
+STRIPE_SECRET_KEY = '007xyz'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
