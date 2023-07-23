@@ -1,5 +1,5 @@
 from django import forms
-from .models import Employee
+from .models import Employee, Device
 
 class EmployeeForm(forms.ModelForm):
     class Meta:
