@@ -1,6 +1,15 @@
-from django.shortcuts import render, redirect
+'''
+Here there are two main kind of views(Methods).
+
+In the first part few basic fundamentals with a scope for further development.
+In the second part views for DRM(Django-Rest-Framework)
+'''
+
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Company, Employee, Device, DeviceLogs
 from .forms import EmployeeForm, DeviceForm
+from django.utils import timezone
+from django.conf import settings
 
 # Method for the home page of the application
 def home(request):
@@ -76,3 +85,29 @@ def add_device(request):
         form = DeviceForm()
 
     return render(request, 'add_device.html', {'form': form})
+
+# Method for fetching all data from company table in database and show in specific user's end
+def list_of_companies(request):
+    companies = Company.objects.all()
+    return render(request, 'company_list.html', {'companies': companies})
+
+# Method for fetching specific company informations
+def company_detail(request, company_id):
+    company = get_object_or_404(Company, id=company_id)
+    employees = company.employee_set.all()
+    return render(request, 'company_detail.html', {'company': company, 'employees': employees})
+
+# Method for fetching all the device lists
+def device_list(request):
+    devices = Device.objects.all()
+    return render(request, 'device_list.html', {'devices': devices})
+
+# (Related to Goal 4) The time of device check in and check out will be available in device details. Company admins can view it.
+def device_detail(request, device_id):
+    device = get_object_or_404(Device, id=device_id)
+    return render(request, 'device_detail.html', {'device': device})
+
+# (Related to Goal 5) Fetch out the device logs information so that admin of company can know the condition of the devices.
+def device_logs(request, devicelogs_id):
+    device = get_object_or_404(DeviceLogs, id=devicelogs_id)
+    return render(request, 'devicelogs.html', {'devicelogs': devicelogs})
