@@ -6,10 +6,14 @@ In the second part views for DRM(Django-Rest-Framework)
 '''
 
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse, JsonResponse
 from .models import Company, Employee, Device, DeviceLogs
+from .serializers import CompanySerializer, EmployeeSerializer, DeviceSerializer, DeviceLogsSerializer
 from .forms import EmployeeForm, DeviceForm
 from django.utils import timezone
 from django.conf import settings
+
+from rest_framework import generics # djangorestframework needs to be installed on the system or env
 
 import stripe # Third party payment gateway. Not available in BD. using it as a placeholder
 
@@ -132,3 +136,53 @@ def payment(request):
         except stripe.error.CardError as e:
             return render(request, 'payment_error.html', {'error': e.error.message})
     return render(request, 'payment.html')
+
+'''
+------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
+'''
+# Django Rest Framework section
+
+
+# Manage Company data through API
+class CompanyListCreateAPIView(generics.ListCreateAPIView):
+    queryset = Company.objects.all()
+    serializer_class = CompanySerializer
+
+
+class CompanyRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Company.objects.all()
+    serializer_class = CompanySerializer
+
+
+# Manage Employees through API. (related Goal 2 & 3)
+class EmployeeListCreateAPIView(generics.ListCreateAPIView):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSerializer
+
+
+class EmployeeRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSerializer
+
+
+# Manage Device through API. (related to Goal 4)
+class DeviceListCreateAPIView(generics.ListCreateAPIView):
+    queryset = Device.objects.all()
+    serializer_class = DeviceSerializer
+
+
+class DeviceRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Device.objects.all()
+    serializer_class = DeviceSerializer
+
+
+# Manage DeviceLogs through API. (related to Goal 5)
+class DeviceLogListCreateAPIView(generics.ListCreateAPIView):
+    queryset = DeviceLogs.objects.all()
+    serializer_class = DeviceLogsSerializer
+
+
+class DeviceLogRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = DeviceLogs.objects.all()
+    serializer_class = DeviceLogsSerializer
